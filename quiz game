@@ -1,0 +1,90 @@
+def ask_single_choice(question):
+    print("\n" + question['question'])
+    for option in question['options']:
+        print(option)
+    answer = input("Your answer (A/B/C/D): ").strip().upper()
+    return answer == question['answer']
+
+
+def ask_multiple_select(question):
+    print("\n" + question['question'])
+    for option in question['options']:
+        print(option)
+    answer = input("Select all correct options (e.g., A,C): ").strip().upper().replace(" ", "")
+    selected = set(answer.split(','))
+    return selected == set(question['answer'])
+
+
+def ask_fill_in_blank(question):
+    print("\n" + question['question'])
+    answer = input("Your answer: ").strip().lower()
+    return answer in [a.lower() for a in question['answer']]
+
+
+def run_quiz():
+    questions = [
+        {
+            "type": "single",
+            "question": "What is the capital of Japan?",
+            "options": ["A. Tokyo", "B. Kyoto", "C. Osaka", "D. Hiroshima"],
+            "answer": "A"
+        },
+        {
+            "type": "multiple",
+            "question": "Which of the following are programming languages?",
+            "options": ["A. Python", "B. HTML", "C. Java", "D. CSS"],
+            "answer": ["A", "C"]
+        },
+        {
+            "type": "fill",
+            "question": "Fill in the blank: The chemical symbol for water is ____.",
+            "answer": ["H2O"]
+        },
+        {
+            "type": "single",
+            "question": "Who is known as the Father of Computers?",
+            "options": ["A. Thomas Edison", "B. Charles Babbage", "C. Albert Einstein", "D. Isaac Newton"],
+            "answer": "B"
+        },
+        {
+            "type": "fill",
+            "question": "Fill in the blank: 5 + 7 = ____.",
+            "answer": ["12"]
+        }
+    ]
+
+    score = 0
+    print("🎮 Welcome to the Advanced Quiz Game!")
+    print("-" * 40)
+
+    for q in questions:
+        if q['type'] == 'single':
+            if ask_single_choice(q):
+                print("✅ Correct!")
+                score += 1
+            else:
+                print(f"❌ Wrong! Correct answer: {q['answer']}")
+        elif q['type'] == 'multiple':
+            if ask_multiple_select(q):
+                print("✅ Correct!")
+                score += 1
+            else:
+                print(f"❌ Wrong! Correct answers: {', '.join(q['answer'])}")
+        elif q['type'] == 'fill':
+            if ask_fill_in_blank(q):
+                print("✅ Correct!")
+                score += 1
+            else:
+                print(f"❌ Wrong! Acceptable answers: {', '.join(q['answer'])}")
+
+    print("\n" + "=" * 40)
+    print(f"🏁 Quiz Completed! Your Score: {score}/{len(questions)}")
+    if score == len(questions):
+        print("🌟 Perfect Score!")
+    elif score >= len(questions) * 0.7:
+        print("🎉 Well done!")
+    else:
+        print("📘 Keep practicing!")
+
+# Start the quiz
+run_quiz()
